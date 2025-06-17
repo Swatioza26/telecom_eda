@@ -26,7 +26,7 @@ authenticator = stauth.Authenticate(
 )
 
 # --- Login UI ---
-name, auth_status, username = authenticator.login("Login", "main")
+name, auth_status, username = authenticator.login("Login", location="sidebar")
 
 if auth_status is False:
     st.error("❌ Incorrect username or password")
