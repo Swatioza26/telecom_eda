@@ -1,5 +1,3 @@
-# eda_visualization.py
-
 import streamlit as st
 import pandas as pd
 import seaborn as sns
@@ -7,33 +5,36 @@ import matplotlib.pyplot as plt
 import streamlit_authenticator as stauth
 
 # --- Authentication Setup ---
-names = ['Admin', 'Guest']
-usernames = ['admin', 'guest']
-hashed_passwords = [
-    '$pbkdf2-sha256$29000$PbPkNfz9By0xXR1hKmlcZw$W7hDL7MJvScRBGn1J6j7ovCZKAhzYOvGCrQdlmxztpA',  # example hash for 'admin123'
-    '$pbkdf2-sha256$29000$PtYDyNTk5BvCibos9wT5Jw$MBlY9kLemNMbQ1Rhcv5AKQaHOGr7VgyLNYzC/N7nD/I'   # example hash for 'guest123'
-]
+credentials = {
+    "usernames": {
+        "admin": {
+            "name": "Admin",
+            "password": "$pbkdf2-sha256$29000$PbPkNfz9By0xXR1hKmlcZw$W7hDL7MJvScRBGn1J6j7ovCZKAhzYOvGCrQdlmxztpA"
+        },
+        "guest": {
+            "name": "Guest",
+            "password": "$pbkdf2-sha256$29000$PtYDyNTk5BvCibos9wT5Jw$MBlY9kLemNMbQ1Rhcv5AKQaHOGr7VgyLNYzC/N7nD/I"
+        }
+    }
+}
 
 authenticator = stauth.Authenticate(
-    names,
-    usernames,
-    hashed_passwords,
-    'eda_app_cookie',      # Cookie name
-    'eda_signature_key',   # Signature key
+    credentials,
+    "eda_app_cookie",
+    "eda_signature_key",
     cookie_expiry_days=1
 )
 
 # --- Login UI ---
-name, auth_status, username = authenticator.login('Login', 'main')
+name, auth_status, username = authenticator.login("Login", "main")
 
-if auth_status == False:
-    st.error('❌ Incorrect username or password')
+if auth_status is False:
+    st.error("❌ Incorrect username or password")
 elif auth_status is None:
-    st.warning('🔐 Please enter your credentials')
+    st.warning("🔐 Please enter your credentials")
 elif auth_status:
-    # --- Logout & Welcome ---
-    authenticator.logout('Logout', 'sidebar')
-    st.sidebar.success(f'✅ Logged in as {name}')
+    authenticator.logout("Logout", "sidebar")
+    st.sidebar.success(f"✅ Logged in as {name}")
 
     # --- EDA Dashboard ---
     st.title("📊 Exploratory Data Analysis (EDA) Dashboard")
